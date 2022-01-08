@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Font Diff</title>
+</head>
+<body>
+    <div id="container-center" style="text-align: center;">
+        <header>
+            <h1>FontDiff Tool</h1>
+            <h3>A web tool to compare font visual rendering for multiple font files.</h3>
+        </header>
+
+        <br>
+
+        <div id="fontfileselector">
+            <span>Fontfile 1 : </span><input type="file" id="myFileInput_1_3">
+            <span>Fontfile 2 : </span> <input type="file" id="myFileInput_2_3">
+            <span>Fontfile 3 : </span><input type="file" id="myFileInput_3_3">
+        </div>
+
+        <textarea id="myTestText" name="w3review" rows="5" cols="60" placeholder="input your test text"></textarea>
+
+        <div class="slidecontainer">
+            <span> choose fontsize: <span id="fontsize"></span></span><input type="range" min="20" max="255" value="100" class="slider" id="myRange">
+        </div>
+    </div> <!-- container-center -->
+    
+    <hr>
+
+    <div id="diplaytext">
+        <span id="ftext_1_3"></span>
+        <h1 id="text_1_3" style="display:none;"></h1>
+        
+        <span id="ftext_2_3"></span>
+        <h1 id="text_2_3" style="display:none;"></h1>
+        
+        <span id="ftext_3_3"></span>
+        <h1 id="text_3_3" style="display:none;"></h1>
+    </div> <!-- displaytext -->
+
+    <script>
+
+        // this function will read fontfile from browse button and add it to text fontface 
+        function readfontfile(selector, element){
+            const reader = new FileReader();  
+            reader.addEventListener("load", ()=>{
+                var newStyle = document.createElement('style');
+                newStyle.appendChild(document.createTextNode("\
+                    @font-face {\
+                        font-family: 'custom-font-"+element+"';\
+                        src: url('"+ reader.result +"') format('truetype');\
+                    }\
+                    "));
+                document.head.appendChild(newStyle);
+                document.getElementById(element).style.fontFamily = "custom-font-"+element;
+            });
+            reader.readAsDataURL(selector.files[0]);
+            //selector.files[0].name
+            document.getElementById("f"+element).innerText = selector.files[0].name;
+            document.getElementById(element).style.display = 'block';
+        }
+
+        // listner to apply textarea text to display text below 
+        document.querySelector('#myTestText').addEventListener("keyup",function(){
+            console.log(this.value);
+            document.getElementById('text_1_3').innerText = this.value;
+            document.getElementById('text_2_3').innerText = this.value;
+            document.getElementById('text_3_3').innerText = this.value;    
+        });
+
+        // listner to change font size of test text
+        document.querySelector('#myRange').addEventListener("change",function(){
+            console.log(this.value);
+            document.getElementById("fontsize").innerText = this.value
+            document.getElementById('text_1_3').style.fontSize = this.value+"px";
+            document.getElementById('text_2_3').style.fontSize = this.value+"px";
+            document.getElementById('text_3_3').style.fontSize = this.value+"px";    
+        });
+        
+        // listner to choose fontfile and apply to text below
+        document.querySelector('#myFileInput_1_3').addEventListener("change",function(){
+            readfontfile(this,"text_1_3");    
+        });
+        document.querySelector('#myFileInput_2_3').addEventListener("change",function(){
+            readfontfile(this,"text_2_3");    
+        });
+        document.querySelector('#myFileInput_3_3').addEventListener("change",function(){
+            readfontfile(this,"text_3_3");    
+        });
+
+    </script>
+</body>
+</html> 
