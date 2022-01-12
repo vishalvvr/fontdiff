@@ -1,93 +1,172 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Font Diff</title>
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/20382324?v=4" type="image/gif" sizes="16x16">
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+
 </head>
-<body>
-    <div id="container-center" style="text-align: center;">
-        <header>
+
+<body style="padding: 0 4%;">
+    <div id="container-center">
+        <header class="center-align">
             <h1>FontDiff Tool</h1>
-            <h3>A web tool to compare font visual rendering for multiple font files.</h3>
+            <h6>A web tool to compare font visual rendering for multiple font files.</h3>
         </header>
 
         <br>
 
-        <div id="fontfileselector">
-            <span>Fontfile 1 : </span><input type="file" id="myFileInput_1_3">
-            <span>Fontfile 2 : </span> <input type="file" id="myFileInput_2_3">
-            <span>Fontfile 3 : </span><input type="file" id="myFileInput_3_3">
+        <div class="row">
+            <div class="col s6">
+                <div id="fontfileselector">
+
+                    <div class="file-field input-field col s4">
+                        <div class="btn orange">
+                            <span>File 1</span>
+                            <input id="myFileInput_1_3" type="file">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
+                    </div>
+
+
+                    <div class="file-field input-field col s4">
+                        <div class="btn indigo">
+                            <span>File 2</span>
+                            <input id="myFileInput_2_3" type="file">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
+                    </div>
+
+
+
+                    <div class="file-field input-field col s4">
+                        <div class="btn teal">
+                            <span>File 3</span>
+                            <input id="myFileInput_3_3" type="file">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s12">
+                        <em class="material-icons prefix grey-text">mode_edit</em>
+                        <textarea id="myTestText" class="materialize-textarea"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam rem corrupti sint natus quia ab.
+                            </textarea>
+                        <label for="textarea1">Add your text here</label>
+                    </div>
+                </div>
+
+                <div class="slidecontainer">
+                    <span> Font Size:
+                        <span id="fontsize">Default</span>
+                    </span>
+                    <p class="range-field">
+                        <input id="myRange" type="range" id="test5" min="0" max="100" />
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="col s6">
+                <div id="diplaytext">
+                    <blockquote class="card-panel white">
+                        <span id="ftext_1_3">Default Font</span>
+                        <p id="text_1_3"> Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quidem possimus, nemo itaque eligendi beatae
+                            repudiandae!</p>
+
+                        <span id="ftext_2_3"></span>
+                        <p id="text_2_3" style="display: none;"> Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quidem possimus, nemo itaque eligendi beatae
+                            repudiandae!</p>
+
+                        <span id="ftext_3_3"></span>
+                        <p id="text_3_3" style="display: none;"> Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quidem possimus, nemo itaque eligendi beatae
+                            repudiandae!</p>
+                    </blockquote>
+                </div>
+                <!-- displaytext -->
+            </div>
+
+
+
         </div>
 
-        <textarea id="myTestText" name="w3review" rows="5" cols="60" placeholder="input your test text"></textarea>
+    </div>
+    <!-- container-center -->
 
-        <div class="slidecontainer">
-            <span> choose fontsize: <span id="fontsize"></span></span><input type="range" min="20" max="255" value="100" class="slider" id="myRange">
-        </div>
-    </div> <!-- container-center -->
-    
-    <hr>
 
-    <div id="diplaytext">
-        <span id="ftext_1_3"></span>
-        <h1 id="text_1_3" style="display:none;"></h1>
-        
-        <span id="ftext_2_3"></span>
-        <h1 id="text_2_3" style="display:none;"></h1>
-        
-        <span id="ftext_3_3"></span>
-        <h1 id="text_3_3" style="display:none;"></h1>
-    </div> <!-- displaytext -->
 
     <script>
-
         // this function will read fontfile from browse button and add it to text fontface 
-        function readfontfile(selector, element){
-            const reader = new FileReader();  
-            reader.addEventListener("load", ()=>{
+        function readfontfile(selector, element) {
+            const reader = new FileReader();
+            reader.addEventListener("load", () => {
                 var newStyle = document.createElement('style');
-                newStyle.appendChild(document.createTextNode("\
+                newStyle.appendChild(document.createTextNode(
+                    "\
                     @font-face {\
-                        font-family: 'custom-font-"+element+"';\
-                        src: url('"+ reader.result +"') format('truetype');\
+                        font-family: 'custom-font-" +
+                    element + "';\
+                        src: url('" + reader.result +
+                    "') format('truetype');\
                     }\
                     "));
                 document.head.appendChild(newStyle);
-                document.getElementById(element).style.fontFamily = "custom-font-"+element;
+                document.getElementById(element).style.fontFamily = "custom-font-" + element;
             });
             reader.readAsDataURL(selector.files[0]);
             //selector.files[0].name
-            document.getElementById("f"+element).innerText = selector.files[0].name;
+            document.getElementById("f" + element).innerText = selector.files[0].name;
             document.getElementById(element).style.display = 'block';
         }
 
         // listner to apply textarea text to display text below 
-        document.querySelector('#myTestText').addEventListener("keyup",function(){
-            console.log(this.value);
+        document.querySelector('#myTestText').addEventListener("keyup", function () {
+            //console.log(this.value);
             document.getElementById('text_1_3').innerText = this.value;
             document.getElementById('text_2_3').innerText = this.value;
-            document.getElementById('text_3_3').innerText = this.value;    
+            document.getElementById('text_3_3').innerText = this.value;
         });
 
         // listner to change font size of test text
-        document.querySelector('#myRange').addEventListener("change",function(){
-            console.log(this.value);
-            document.getElementById("fontsize").innerText = this.value
-            document.getElementById('text_1_3').style.fontSize = this.value+"px";
-            document.getElementById('text_2_3').style.fontSize = this.value+"px";
-            document.getElementById('text_3_3').style.fontSize = this.value+"px";    
-        });
-        
-        // listner to choose fontfile and apply to text below
-        document.querySelector('#myFileInput_1_3').addEventListener("change",function(){
-            readfontfile(this,"text_1_3");    
-        });
-        document.querySelector('#myFileInput_2_3').addEventListener("change",function(){
-            readfontfile(this,"text_2_3");    
-        });
-        document.querySelector('#myFileInput_3_3').addEventListener("change",function(){
-            readfontfile(this,"text_3_3");    
+        document.querySelector('#myRange').addEventListener("change", function () {
+            //console.log(this.value);
+            document.getElementById("fontsize").innerText = this.value + "px";
+            document.getElementById('text_1_3').style.fontSize = this.value + "px";
+            document.getElementById('text_2_3').style.fontSize = this.value + "px";
+            document.getElementById('text_3_3').style.fontSize = this.value + "px";
         });
 
+        // listner to choose fontfile and apply to text below
+        document.querySelector('#myFileInput_1_3').addEventListener("change", function () {
+            readfontfile(this, "text_1_3");
+        });
+        document.querySelector('#myFileInput_2_3').addEventListener("change", function () {
+            readfontfile(this, "text_2_3");
+        });
+        document.querySelector('#myFileInput_3_3').addEventListener("change", function () {
+            readfontfile(this, "text_3_3");
+        });
     </script>
 </body>
-</html> 
+
+</html>
